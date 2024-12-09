@@ -14,7 +14,7 @@ app.use("/api", userRoutes);
 connectDB();
 
 // Uruchamiamy serwer Express
-const PORT = process.env.PORT || 3000; // Możesz ustawić port z innej konfiguracji
+const PORT = process.env.PORT || 3001; // Możesz ustawić port z innej konfiguracji
 app.listen(PORT, () => {
   console.log(`Serwer działa na porcie ${PORT}`);
 });

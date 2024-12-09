@@ -8,7 +8,7 @@ export default defineNuxtConfig({
       require("./server/app.js"); // Run backend before Nuxt
     },
   },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/scss/main.scss"],
   postcss: {
     plugins: {
       tailwindcss: {},

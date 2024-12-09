@@ -7,7 +7,5 @@ export default defineEventHandler((event) => {
     `${Cookies.BEARER_TOKEN}=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Strict`
   );
 
-  return {
-    message: "Wylogowano pomyślnie",
-  };
+  return;
 });

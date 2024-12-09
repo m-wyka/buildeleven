@@ -7,6 +7,7 @@ import HttpStatusCode from "~/enums/httpStatusCode";
 import { useAuthStore } from "~/store/auth";
 import type { UserResponse } from "~/server/types/user";
 
+const { t } = useI18n();
 const authStore = useAuthStore();
 const formData = reactive({
   email: "",
@@ -23,11 +24,11 @@ const handleSubmit = async () => {
     }
   );
 
-  if (!data.value) {
-    return;
-  }
-
   if (status.value === HttpStatusCode.OK) {
+    if (!data.value) {
+      return;
+    }
+
     const { token, user } = data.value;
     authStore.setToken(token);
     authStore.setUser(user);
@@ -37,6 +38,13 @@ const handleSubmit = async () => {
     formData.password = "";
 
     navigateTo("/");
+  }
+
+  if (
+    status.value === HttpStatusCode.BAD_REQUEST ||
+    status.value === HttpStatusCode.UNAUTHORIZED
+  ) {
+    useNuxtApp().$toast.error(t("AUTH.MESSAGES.INVALID_EMAIL_OR_PASSWORD"));
   }
 };
 </script>
@@ -48,17 +56,19 @@ const handleSubmit = async () => {
         v-model:model-value="formData.email"
         type="email"
         id="email"
-        label="Email"
+        :label="$t('FORM.EMAIL')"
       />
 
       <Input
         v-model:model-value="formData.password"
         type="password"
         id="password"
-        label="Password"
+        :label="$t('FORM.PASSWORD')"
       />
 
-      <Btn type="submit">Submit</Btn>
+      <Btn type="submit">
+        {{ $t("AUTH.SIGN_IN") }}
+      </Btn>
     </div>
   </form>
 </template>

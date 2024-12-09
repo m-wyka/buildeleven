@@ -12,7 +12,7 @@ const handleSignOut = async () => {
     method: "POST",
   });
 
-  if (status.value === HttpStatusCode.OK) {
+  if (status.value === HttpStatusCode.NO_CONTENT) {
     authStore.setToken(undefined);
     authStore.setUser(null);
   }

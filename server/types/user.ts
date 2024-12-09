@@ -3,7 +3,7 @@ import { BearerToken } from "~/types/auth";
 
 export interface UserAttributes {
   id: number;
-  name: string;
+  nickname: string;
   email: string;
   password: string;
   emailVerified: boolean;
@@ -16,7 +16,7 @@ export interface UserCreationAttributes
 
 // Create
 export interface CreateUserBody {
-  name: string;
+  nickname: string;
   email: string;
   password: string;
 }

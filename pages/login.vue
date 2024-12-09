@@ -8,8 +8,10 @@ definePageMeta({
 
 <template>
   <div class="container">
-    <div class="wrapper bg-gray-800 p-4 rounded-lg border border-white/5">
-      <h1 class="text-4xl mb-8">Sign in</h1>
+    <div class="wrapper bg-gray-800 p-4 rounded-lg border border-gray-700">
+      <h1 class="text-4xl mb-8 font-semibold">
+        {{ $t("PAGES.LOGIN") }}
+      </h1>
 
       <LoginForm />
     </div>

@@ -5,36 +5,38 @@ import { CreateUserBody } from "~/server/types/user";
 import { CustomError } from "~/types/api";
 
 export default defineEventHandler(async (event: H3Event) => {
+  const t = await useTranslation(event);
+
   try {
-    const { name, email, password } = await readBody<CreateUserBody>(event);
+    const { nickname, email, password } = await readBody<CreateUserBody>(event);
 
-    if (!name || !email || !password) {
+    if (!nickname || !email || !password) {
       throw createError({
         statusCode: 400,
-        message: "Wszystkie pola są wymagane.",
+        message: t("AUTH.MESSAGES.ALL_FIELDS_REQUIRED"),
       });
     }
 
-    const user = await User.findOne({ where: { email } });
+    const userByNickame = await User.findOne({ where: { nickname } });
+    const userByEmail = await User.findOne({ where: { email } });
 
-    if (user) {
+    if (userByNickame || userByEmail) {
       throw createError({
-        statusCode: 400,
-        message: "Użytkownik o tym e-mailu już istnieje.",
+        statusCode: 409,
+        message: t("AUTH.MESSAGES.USER_EXIST"),
       });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
-      name,
+      nickname,
       email,
       password: hashedPassword,
       emailVerified: false,
     });
 
     return {
-      message: "Zarejestrowano konto pomyślnie.",
+      message: t("AUTH.MESSAGES.REGISTER_SUCCESS"),
     };
   } catch (error) {
     const err = error as CustomError;

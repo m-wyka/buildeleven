@@ -5,7 +5,7 @@ import { UserAttributes, UserCreationAttributes } from "~/server/types/user";
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
   declare id: number;
-  declare name: string;
+  declare nickname: string;
   declare email: string;
   declare password: string;
   declare emailVerified: boolean;
@@ -25,7 +25,7 @@ User.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    nickname: {
       type: DataTypes.STRING,
       allowNull: false,
     },

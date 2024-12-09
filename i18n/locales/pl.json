@@ -3,6 +3,24 @@
     "SIGN_IN": "Zaloguj",
     "SIGN_UP": "Zarejestruj",
     "SIGN_OUT": "Wyloguj",
-    "": ""
+    "MESSAGES": {
+      "INVALID_EMAIL_OR_PASSWORD": "Nieprawidłowy e-mail lub hasło.",
+      "EMAIL_VERIFY": "Zweryfikuj swój adres e-mail przed zalogowaniem.",
+      "ALL_FIELDS_REQUIRED": "Wsystkie pola są wymagane.",
+      "USER_EXIST": "Użytkownik o podanej nazwie lub adresie e-mail już istnieje w systemie.",
+      "REGISTER_SUCCESS": "Gratulacje! Twoje konto zostało pomyślnie zarejestrowane. Sprawdź swoją skrzynkę odbiorczą, aby potwierdzić adres e-mail, a następnie zaloguj się, aby uzyskać pełen dostęp do naszego serwisu."
+    }
+  },
+  "FORM": {
+    "NICKNAME": "Nazwa użytkownika",
+    "EMAIL": "Adres e-mail",
+    "PASSWORD": "Hasło"
+  },
+  "VALIDATION": {
+    "FIELD_REQUIRED": "To pole jest wymagane"
+  },
+  "PAGES": {
+    "LOGIN": "Logowanie",
+    "REGISTER": "Rejestracja"
   }
 }

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import Cookies from "~/enums/cookies";
 import type { UserAttributes } from "~/server/types/user";
-import type { AuthStore, BearerToken, CookiesExpires } from "~/types/auth";
+import type { AuthStore, BearerToken } from "~/types/auth";
 
 export const useAuthStore = defineStore("auth", {
   state: (): AuthStore => ({

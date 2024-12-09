@@ -6,13 +6,15 @@ import { LoginUserBody } from "~/server/types/user";
 import { CustomError } from "~/types/api";
 
 export default defineEventHandler(async (event: H3Event) => {
+  const t = await useTranslation(event);
+
   try {
     const { email, password } = await readBody<LoginUserBody>(event);
 
     if (!email || !password) {
       throw createError({
         statusCode: 400,
-        message: "Nieprawidłowy e-mail lub hasło.",
+        message: t("AUTH.MESSAGES.INVALID_EMAIL_OR_PASSWORD"),
       });
     }
 
@@ -20,14 +22,14 @@ export default defineEventHandler(async (event: H3Event) => {
     if (!user || !user.validatePassword(password)) {
       throw createError({
         statusCode: 401,
-        message: "Nieprawidłowy e-mail lub hasło.",
+        message: t("AUTH.MESSAGES.INVALID_EMAIL_OR_PASSWORD"),
       });
     }
 
     if (!user.emailVerified) {
       throw createError({
         statusCode: 401,
-        message: "Proszę zweryfikować swój adres e-mail przed zalogowaniem.",
+        message: t("AUTH.MESSAGES.EMAIL_VERIFY"),
       });
     }
 
