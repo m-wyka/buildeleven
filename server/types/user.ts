@@ -1,5 +1,5 @@
 import { Optional } from "sequelize";
-import { BaererToken } from "~/types/auth";
+import { BearerToken } from "~/types/auth";
 
 export interface UserAttributes {
   id: number;
@@ -28,6 +28,6 @@ export interface LoginUserBody {
 }
 
 export type UserResponse = {
-  token: BaererToken;
+  token: BearerToken;
   user: UserAttributes;
 };

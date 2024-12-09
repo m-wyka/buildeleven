@@ -1,4 +1,3 @@
-const API_REGISTER = "auth/register";
-const API_LOGIN = "auth/login";
-
-export { API_REGISTER, API_LOGIN };
+export const API_REGISTER = "auth/register";
+export const API_LOGIN = "auth/login";
+export const API_LOGOUT = "auth/logout";

@@ -1,6 +1,7 @@
+import Cookies from "~/enums/cookies";
 import HttpStatusCode from "~/enums/httpStatusCode";
 import type { NitroFetchRequest } from "nitropack";
-import type { BaererToken } from "~/types/auth";
+import type { BearerToken } from "~/types/auth";
 
 export async function useDataFetch<T>(
   request: NitroFetchRequest,
@@ -8,7 +9,7 @@ export async function useDataFetch<T>(
   options?: any
 ) {
   const config = useRuntimeConfig();
-  const token = useCookie<BaererToken>("BEARER-TOKEN");
+  const token = useCookie<BearerToken>(Cookies.BEARER_TOKEN);
   const data = ref<T | null>(null);
   const error = ref<Error | null>(null);
   const pending = ref<boolean>(true);

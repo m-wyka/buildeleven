@@ -1,5 +1,22 @@
 <script setup lang="ts">
+import { useDataFetch } from "~/composables/useDataFetch";
+import { API_LOGOUT } from "~/constants/endpoints";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import HttpStatusCode from "~/enums/httpStatusCode";
+import { useAuthStore } from "~/store/auth";
+
+const authStore = useAuthStore();
+
+const handleSignOut = async () => {
+  const { status } = await useDataFetch(API_LOGOUT, "auth_logout", {
+    method: "POST",
+  });
+
+  if (status.value === HttpStatusCode.OK) {
+    authStore.setToken(undefined);
+    authStore.setUser(null);
+  }
+};
 </script>
 
 <template>
@@ -56,8 +73,10 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
               active ? 'bg-gray-100 outline-none' : '',
               'block px-4 py-2 text-sm text-gray-700',
             ]"
-            >Sign out</a
+            @click="handleSignOut"
           >
+            {{ $t("AUTH.SIGN_OUT") }}
+          </a>
         </MenuItem>
       </MenuItems>
     </transition>

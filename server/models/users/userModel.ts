@@ -56,7 +56,6 @@ User.addHook("beforeSave", (user: User) => {
   }
 });
 
-// Funkcja do pobierania wszystkich użytkowników
 const getUsersModel = async () => {
   try {
     const users = await User.findAll({ offset: 0, limit: 10 });
@@ -67,15 +66,4 @@ const getUsersModel = async () => {
   }
 };
 
-// Funkcja do usuwania użytkownika
-const deleteUserModel = async (id: number) => {
-  try {
-    const user = await User.destroy({ where: { id } });
-    return user;
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    throw error;
-  }
-};
-
-export { User, getUsersModel, deleteUserModel };
+export { User, getUsersModel };

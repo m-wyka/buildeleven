@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
+    "@nuxtjs/i18n": "9.0.0-rc.2",
     "@pinia/nuxt": "^0.9.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
