@@ -1,8 +1,9 @@
 import { H3Event, createError } from "h3";
 import bcrypt from "bcryptjs";
-import { User } from "~/server/models/users/userModel.js";
-import { CreateUserBody } from "~/server/types/user";
+import { User } from "~/server/models/users/user.model.js";
+import { CreateUserBody } from "~/types/user";
 import { CustomError } from "~/types/api";
+import { nicknameRegex } from "~/constants/regex";
 
 export default defineEventHandler(async (event: H3Event) => {
   const t = await useTranslation(event);
@@ -13,7 +14,14 @@ export default defineEventHandler(async (event: H3Event) => {
     if (!nickname || !email || !password) {
       throw createError({
         statusCode: 400,
-        message: t("AUTH.MESSAGES.ALL_FIELDS_REQUIRED"),
+        message: t("VALIDATION.ALL_FIELDS_REQUIRED"),
+      });
+    }
+
+    if (!nicknameRegex.test(nickname)) {
+      throw createError({
+        statusCode: 400,
+        message: t("AUTH.MESSAGES.INVALID_NICKNAME"),
       });
     }
 

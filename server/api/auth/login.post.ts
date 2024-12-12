@@ -1,8 +1,8 @@
 import { H3Event, createError } from "h3";
 import jwt from "jsonwebtoken";
 import Cookies from "~/enums/cookies";
-import { User } from "~/server/models/users/userModel.js";
-import { LoginUserBody } from "~/server/types/user";
+import { User } from "~/server/models/users/user.model.js";
+import { LoginUserBody } from "~/types/user";
 import { CustomError } from "~/types/api";
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -33,11 +33,12 @@ export default defineEventHandler(async (event: H3Event) => {
       });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET!, {
       expiresIn: "7d",
     });
 
     // Set BEARER_TOKEN
+    event.node.res.setHeader("Authorization", `Bearer ${token}`);
     event.node.res.setHeader(
       "Set-Cookie",
       `${Cookies.BEARER_TOKEN}=${token}; Max-Age=${

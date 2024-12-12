@@ -1,7 +1,7 @@
-import Cookies from "~/enums/cookies";
 import HttpStatusCode from "~/enums/httpStatusCode";
 import type { NitroFetchRequest } from "nitropack";
-import type { BearerToken } from "~/types/auth";
+import type { ErrorHandler } from "~/types/api";
+import { useAuthStore } from "~/store/auth";
 
 export async function useDataFetch<T>(
   request: NitroFetchRequest,
@@ -9,9 +9,10 @@ export async function useDataFetch<T>(
   options?: any
 ) {
   const config = useRuntimeConfig();
-  const token = useCookie<BearerToken>(Cookies.BEARER_TOKEN);
+  const authStore = useAuthStore();
+  const { getToken } = storeToRefs(authStore);
   const data = ref<T | null>(null);
-  const error = ref<Error | null>(null);
+  const error = ref<ErrorHandler | null>(null);
   const pending = ref<boolean>(true);
   const status = ref<HttpStatusCode | undefined>(undefined);
 
@@ -21,17 +22,22 @@ export async function useDataFetch<T>(
       key,
       method: options?.method || "GET",
       headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Bearer ${token.value}`,
+        ...(getToken.value !== undefined && {
+          Authorization: `Bearer ${getToken.value}`,
+        }),
       },
       ...options,
       onResponse({ response }) {
         status.value = response.status;
       },
+      onResponseError({ response }) {
+        error.value = response._data as ErrorHandler;
+      },
     });
   } catch (err) {
-    error.value = err as Error;
+    //
   } finally {
     pending.value = false;
   }

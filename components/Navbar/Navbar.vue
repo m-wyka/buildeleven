@@ -5,8 +5,8 @@ import { useAuthStore } from "~/store/auth";
 import ProfileDropdown from "./ProfileDropdown.vue";
 
 const route = useRoute();
-const authStore = useAuthStore();
 const { t } = useI18n();
+const authStore = useAuthStore();
 const { isAuth } = storeToRefs(authStore);
 
 const navigation = [{ name: "Home", href: "/", current: true }];

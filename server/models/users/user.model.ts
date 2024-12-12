@@ -1,7 +1,7 @@
-import { DataTypes, Model } from "sequelize";
-import { sequelize } from "../../config/database";
 import bcrypt from "bcryptjs";
-import { UserAttributes, UserCreationAttributes } from "~/server/types/user";
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../../utils/db.instance";
+import type { UserAttributes, UserCreationAttributes } from "~/types/user";
 
 class User extends Model<UserAttributes, UserCreationAttributes> {
   declare id: number;
@@ -11,8 +11,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> {
   declare emailVerified: boolean;
   declare createdAt: string;
   declare updatedAt: string;
+  declare imageId: number | null;
 
-  // Metoda do porównywania hasła
   public validatePassword(password: string): boolean {
     return bcrypt.compareSync(password, this.password);
   }
@@ -27,6 +27,7 @@ User.init(
     },
     nickname: {
       type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
     email: {
@@ -43,27 +44,16 @@ User.init(
       defaultValue: false,
       allowNull: false,
     },
+    imageId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
   },
   {
     sequelize,
+    modelName: "User",
     tableName: "users",
   }
 );
 
-User.addHook("beforeSave", (user: User) => {
-  if (user.changed("password")) {
-    user.password = bcrypt.hashSync(user.password, 10);
-  }
-});
-
-const getUsersModel = async () => {
-  try {
-    const users = await User.findAll({ offset: 0, limit: 10 });
-    return users;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    throw error;
-  }
-};
-
-export { User, getUsersModel };
+export { User };

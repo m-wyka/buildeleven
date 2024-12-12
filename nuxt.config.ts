@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   modules: ["@pinia/nuxt", "@nuxtjs/i18n"],
   hooks: {
     "build:before": () => {
-      require("./server/app.js"); // Run backend before Nuxt
+      require("./server/app.ts"); // Run backend before Nuxt
     },
   },
   css: ["~/assets/scss/main.scss"],
@@ -40,4 +40,10 @@ export default defineNuxtConfig({
       localeDetector: "locale-detector.ts",
     },
   },
+  // serverHandlers: [
+  //   {
+  //     route: "/uploads/(.*)",
+  //     handler: "~/server/api/user/image.get.ts",
+  //   },
+  // ],
 });
