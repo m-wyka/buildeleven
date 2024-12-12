@@ -2,13 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  modules: ["@pinia/nuxt"],
+  modules: ["@pinia/nuxt", "@nuxtjs/i18n"],
   hooks: {
     "build:before": () => {
-      require("./server/app.js"); // Run backend before Nuxt
+      require("./server/app.ts"); // Run backend before Nuxt
     },
   },
-  css: ["~/assets/css/main.css"],
+  css: ["~/assets/scss/main.scss"],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -29,4 +29,21 @@ export default defineNuxtConfig({
       baseURL: process.env.BASE_URL,
     },
   },
+  i18n: {
+    strategy: "no_prefix",
+    locales: ["pl"],
+    defaultLocale: "pl",
+    lazy: true,
+    vueI18n: "./i18n/i18n.config.ts",
+    detectBrowserLanguage: false,
+    experimental: {
+      localeDetector: "locale-detector.ts",
+    },
+  },
+  // serverHandlers: [
+  //   {
+  //     route: "/uploads/(.*)",
+  //     handler: "~/server/api/user/image.get.ts",
+  //   },
+  // ],
 });

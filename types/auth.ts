@@ -1,10 +1,14 @@
-import type { UserAttributes } from "~/server/types/user";
+import type { UserAttributes } from "./user";
+import type { FileAttributes } from "./file";
 
-export type BaererToken = string | null | undefined;
-export type CookiesExpires = string | Date;
+export type BearerToken = string | null | undefined;
+
+export type UserImage = {
+  url: string;
+} & FileAttributes;
 
 export interface AuthStore {
-  token: BaererToken;
-  cookiesExpires: CookiesExpires;
-  user: UserAttributes;
+  token: BearerToken;
+  user: UserAttributes | null;
+  userImage: UserImage | null;
 }

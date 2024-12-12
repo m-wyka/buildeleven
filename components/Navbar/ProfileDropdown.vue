@@ -1,21 +1,71 @@
 <script setup lang="ts">
+import { useDataFetch } from "~/composables/useDataFetch";
+import { API_LOGOUT } from "~/constants/endpoints";
+import HttpStatusCode from "~/enums/httpStatusCode";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import { useAuthStore } from "~/store/auth";
+import { useUser } from "~/composables/useUser";
+import BlankAvatar from "../profile/BlankAvatar.vue";
+
+const route = useRoute();
+const { t } = useI18n();
+const authStore = useAuthStore();
+const { getUser, getUserImage } = storeToRefs(authStore);
+const { fetchUserData } = useUser();
+
+const handleSignOut = async () => {
+  const { status } = await useDataFetch(API_LOGOUT, "auth_logout", {
+    method: "POST",
+  });
+
+  if (status.value === HttpStatusCode.NO_CONTENT) {
+    authStore.setToken(undefined);
+    authStore.setUser(null);
+  }
+};
+
+const items = [
+  { name: t("PROFILE.SETTINGS"), href: "/profile/settings", current: false },
+];
+
+const handleItems = computed(() => {
+  return items.map((item) => ({
+    ...item,
+    current: route.path === item.href,
+  }));
+});
+
+onMounted(async () => {
+  if (!getUser.value) {
+    await fetchUserData();
+  }
+});
 </script>
 
 <template>
   <Menu as="div" class="relative ml-3">
-    <div>
-      <MenuButton
-        class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-      >
-        <span class="absolute -inset-1.5" />
-        <span class="sr-only">Open user menu</span>
-        <img
-          class="size-8 rounded-full"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-      </MenuButton>
+    <div v-if="getUser">
+      <div class="flex items-center">
+        <p class="mr-2 text-sm">{{ getUser.nickname }}</p>
+
+        <MenuButton
+          class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+        >
+          <span class="absolute -inset-1.5" />
+          <span class="sr-only">
+            {{ $t("PROFILE.OPEN_USER_MENU") }}
+          </span>
+
+          <img
+            v-if="getUserImage"
+            class="size-10 rounded-full"
+            :src="getUserImage.url"
+            :alt="getUser.nickname"
+          />
+
+          <BlankAvatar v-else size="sm" />
+        </MenuButton>
+      </div>
     </div>
 
     <transition
@@ -29,16 +79,22 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
       <MenuItems
         class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
       >
-        <MenuItem v-slot="{ active }">
+        <MenuItem
+          v-for="(item, index) in handleItems"
+          :key="index"
+          v-slot="{ active }"
+        >
           <a
-            href="#"
+            :href="item.href"
             :class="[
               active ? 'bg-gray-100 outline-none' : '',
               'block px-4 py-2 text-sm text-gray-700',
             ]"
-            >Your Profile</a
+          >
+            {{ item.name }}</a
           >
         </MenuItem>
+
         <MenuItem v-slot="{ active }">
           <a
             href="#"
@@ -46,18 +102,10 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
               active ? 'bg-gray-100 outline-none' : '',
               'block px-4 py-2 text-sm text-gray-700',
             ]"
-            >Settings</a
+            @click="handleSignOut"
           >
-        </MenuItem>
-        <MenuItem v-slot="{ active }">
-          <a
-            href="#"
-            :class="[
-              active ? 'bg-gray-100 outline-none' : '',
-              'block px-4 py-2 text-sm text-gray-700',
-            ]"
-            >Sign out</a
-          >
+            {{ $t("AUTH.SIGN_OUT") }}
+          </a>
         </MenuItem>
       </MenuItems>
     </transition>

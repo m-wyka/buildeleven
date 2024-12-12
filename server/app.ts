@@ -1,22 +1,20 @@
 import express from "express";
-import { connectDB } from "./config/database";
-import userRoutes from "./routes/users/userRoutes";
+import { resetDatabase } from "./utils/reset.db.ts";
 
 const app = express();
 
-// Middleware
-app.use(express.json());
+const startServer = async () => {
+  try {
+    // await resetDatabase();
 
-// Podłączamy trasy
-app.use("/api", userRoutes);
+    const PORT = process.env.PORT || 3001;
 
-// Łączymy się z bazą danych
-connectDB();
+    app.listen(PORT, () => {
+      console.log(`Serwer działa na porcie ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error starting the server:", error);
+  }
+};
 
-// Uruchamiamy serwer Express
-const PORT = process.env.PORT || 3000; // Możesz ustawić port z innej konfiguracji
-app.listen(PORT, () => {
-  console.log(`Serwer działa na porcie ${PORT}`);
-});
-
-export default app;
+startServer();

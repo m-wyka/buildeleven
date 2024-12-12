@@ -5,14 +5,15 @@ import { useAuthStore } from "~/store/auth";
 import ProfileDropdown from "./ProfileDropdown.vue";
 
 const route = useRoute();
+const { t } = useI18n();
 const authStore = useAuthStore();
 const { isAuth } = storeToRefs(authStore);
 
 const navigation = [{ name: "Home", href: "/", current: true }];
 
 const navi = [
-  { name: "Login", href: "/login", current: false },
-  { name: "Register", href: "/register", current: false },
+  { name: t("AUTH.SIGN_IN"), href: "/login", current: false },
+  { name: t("AUTH.SIGN_UP"), href: "/register", current: false },
 ];
 
 const activeNavigation = computed(() => {
